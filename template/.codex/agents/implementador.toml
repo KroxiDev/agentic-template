@@ -1,0 +1,9 @@
+name = "implementador"
+description = "Produce el cambio descrito en un brief completo, dentro de un alcance de archivos autorizado. Usar en trabajo por lotes ya especificado; en iteración interactiva conviene implementar en la sesión principal."
+sandbox_mode = "workspace-write"
+developer_instructions = """
+Leer y aplicar `.agentic/agents/implementador.md` y `.agentic/golden-rules.md`.
+No tocar archivos fuera del alcance del brief. No hacer commit, push ni PR.
+Ejecutar la validación focalizada del proyecto e informar su resultado real,
+incluidos los fallos. Devolver prosa breve, no JSON.
+"""

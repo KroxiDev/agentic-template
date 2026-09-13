@@ -1,88 +1,123 @@
-# Plantilla de capa agéntica
+# agentic-template
 
-Estructura documental para incorporar una capa agéntica a un proyecto de software, documentación, investigación, análisis u otro trabajo asistido por agentes. Contiene únicamente carpetas y archivos Markdown, sin dependencias de un proveedor, modelo, lenguaje o plataforma.
+Capa agéntica mínima para integrar a un proyecto. Compatible con **Claude Code** y
+**Codex**, con subagentes reales en las dos.
 
-El proyecto que la adopte será responsable de adaptar sus instrucciones, roles, procedimientos y fuentes. Los ejemplos son un punto de partida; cada componente puede modificarse, ampliarse o retirarse.
+El contenido vive una sola vez en `.agentic/`. Los archivos bajo `.claude/` y
+`.codex/` son adaptadores de 3 a 6 líneas que apuntan ahí.
 
-## Estructura
+## Integrar
 
-```text
-.
-├── AGENTS.md                         # Orquestador y punto de entrada
-├── README.md                         # Guía de la plantilla
-└── .agentic/
-    ├── agents/                       # Responsabilidades de los agentes
-    │   ├── README.md
-    │   ├── researcher.md
-    │   ├── executor.md
-    │   ├── reviewer.md
-    │   └── template.md
-    ├── skills/                       # Procedimientos reutilizables
-    │   ├── README.md
-    │   ├── planning/
-    │   │   └── SKILL.md
-    │   ├── verification/
-    │   │   └── SKILL.md
-    │   └── template.md
-    ├── tools/                        # Catálogo de capacidades e integraciones
-    │   ├── README.md
-    │   ├── template.md
-    │   ├── python/                   # Ejemplos opcionales de calidad con Agentic Core
-    │   │   ├── README.md
-    │   │   ├── mutation-testing.md
-    │   │   ├── dry-analysis.md
-    │   │   └── crap-analysis.md
-    │   └── mcp/
-    │       ├── README.md
-    │       └── template.md
-    ├── context/                      # Contexto del proyecto y continuidad
-    │   ├── project.md
-    │   ├── memory/
-    │   │   ├── README.md
-    │   │   ├── short-term.md
-    │   │   └── long-term.md
-    │   └── session/
-    │       └── state.md
-    └── knowledge/                    # Fuentes de conocimiento y consulta
-        ├── README.md
-        ├── docs/
-        │   └── README.md
-        ├── db/
-        │   └── README.md
-        └── vector-store/
-            └── README.md
+```bash
+npx --yes github:KroxiDev/agentic-template init .
 ```
 
-## Correspondencia con la capa agéntica
+`--dry-run` muestra el plan sin escribir nada.
 
-| Componente | Responsabilidad | Entrada |
+**Una sola dirección.** No hay `update`, `doctor` ni `uninstall`. Una vez
+integrada, la capa pertenece al proyecto: modificarla, hacerla crecer o borrarla
+es decisión suya. Para retirarla: borrar `.agentic/`, `.claude/`, `.codex/` y el
+bloque `AGENTIC_TEMPLATE` de `AGENTS.md` y `CLAUDE.md`.
+
+`init` nunca sobrescribe. Si `AGENTS.md` o `CLAUDE.md` ya existen, agrega un
+bloque delimitado al final. Si cualquier otro archivo existe con contenido
+distinto, aborta y te dice cuál.
+
+## Qué instala
+
+```text
+AGENTS.md                          # contrato del proyecto — lo lee Codex
+CLAUDE.md                          # @AGENTS.md + @.agentic/golden-rules.md
+.agentic/
+  golden-rules.md                  # K.E.Y. / C.L.E.A.N. / F.I.R.S.T.
+  README.md                        # mapa de integración y crecimiento
+  skills/orquestar.md              # el procedimiento     ← fuente única
+  skills/completar-contrato.md     # llenar los pendientes ← fuente única
+  agents/investigador.md           # persona              ← fuente única
+  agents/implementador.md          # persona              ← fuente única
+  agents/revisor.md                # persona              ← fuente única
+  run/.gitignore                   # workspace efímero, fuera de git
+.claude/
+  skills/orquestar/SKILL.md        # adaptador
+  commands/completar-contrato.md   # adaptador
+  agents/{investigador,implementador,revisor}.md
+.codex/
+  agents/{investigador,implementador,revisor}.toml
+```
+
+18 archivos. Ocho son adaptadores.
+
+## Completar el contrato
+
+`AGENTS.md` llega con 10 campos `[PENDIENTE]`. `init` termina imprimiendo cómo
+llenarlos:
+
+```text
+  Claude   ->  /completar-contrato
+  Codex    ->  Leé .agentic/skills/completar-contrato.md y aplicalo
+```
+
+Los campos no son todos iguales. Siete son inferibles del repo —nombre,
+arquitectura, entrypoints, comandos de validación, tests, rama—; tres solo los
+sabe el usuario: el propósito, las rutas protegidas y dónde vive la documentación
+autoritativa.
+
+Así que el procedimiento propone los primeros **con su evidencia** (`archivo:línea`
+o el comando que la produjo) y pregunta los segundos, en una sola tanda. Lo que no
+se confirma queda `[PENDIENTE]`: un hueco declarado se ve, un valor inventado no.
+
+Sirve de nuevo cada vez que agregues un campo al contrato.
+
+## Compatibilidad
+
+| | Claude Code | Codex |
 | --- | --- | --- |
-| Orquestador | Entender la solicitud, planificar, seleccionar recursos, coordinar y entregar. | [AGENTS.md](AGENTS.md) |
-| Skills | Describir cómo realizar una tarea repetible. | [Catálogo de skills](.agentic/skills/README.md) |
-| Agentes especializados | Delimitar quién se ocupa de una tarea y qué debe devolver. | [Catálogo de agentes](.agentic/agents/README.md) |
-| Tools / MCP | Documentar las capacidades disponibles y sus condiciones de uso. | [Herramientas](.agentic/tools/README.md) y [MCP](.agentic/tools/mcp/README.md) |
-| Contexto / Memoria | Conservar contexto del proyecto, trabajo reciente, aprendizajes y estado de sesión. | [Proyecto](.agentic/context/project.md) y [continuidad](.agentic/context/memory/README.md) |
-| Knowledge / RAG | Localizar fuentes documentales, datos y mecanismos opcionales de recuperación. | [Conocimiento](.agentic/knowledge/README.md) |
+| Contrato | `CLAUDE.md` con `@AGENTS.md` | `AGENTS.md` directo |
+| Reglas siempre vigentes | import, en contexto al arrancar | línea imperativa en `AGENTS.md` |
+| Subagentes | `.claude/agents/*.md` | `.codex/agents/*.toml` |
+| Skills | `.claude/skills/<n>/SKILL.md` | `.agentic/skills/` vía `AGENTS.md` |
+| MCP | `.mcp.json` | `.codex/config.toml` |
 
-El orquestador consulta solo los recursos pertinentes. Los roles pueden aplicar skills, utilizar herramientas y consultar conocimiento; no es obligatorio usar todos los componentes en cada tarea. La memoria conserva continuidad del trabajo, mientras que conocimiento apunta a las fuentes que lo sustentan.
+Claude Code no lee `AGENTS.md`; por eso `CLAUDE.md` lo importa. Sin ese puente, el
+contrato no llega a Claude.
 
-Como prueba de concepto, [tools/python/](.agentic/tools/python/README.md) incluye fichas de mutación, DRY y C.R.A.P. mediante Agentic Core. Son ejemplos opcionales para proyectos Python; se activan por solicitud o por una regla explícita del proyecto adoptante. La plantilla conserva su uso general sin este componente.
+## Los roles
 
-## Adaptar a un proyecto
+| Rol | Momento | Entrada | Salida |
+| --- | --- | --- | --- |
+| **Investigador** | antes de decidir | una pregunta cerrada | respuesta con fuentes |
+| **Implementador** | durante | un brief completo | cambios + validación ejecutada |
+| **Revisor** | después | diff + criterios | veredicto por criterio |
 
-1. Incorporar `.agentic/` al proyecto de destino y adaptar el contenido de `AGENTS.md` a su punto de entrada. Si ya existen instrucciones o una carpeta equivalente, integrar el contenido conservando las reglas y los archivos propios del proyecto.
-2. Completar [el contexto del proyecto](.agentic/context/project.md): propósito, límites, convenciones y forma de comprobar resultados. `[PENDIENTE]` señala una decisión abierta; usar `[NO APLICA]` cuando corresponda.
-3. Seleccionar los agentes y skills útiles. Adaptar sus ejemplos o crear otros desde los moldes de cada catálogo, actualizando sus enlaces.
-4. Documentar las herramientas y fuentes reales. Mantener como no configuradas las integraciones que el proyecto todavía no utilice.
-5. Decidir si se conservará memoria entre sesiones y completar su política de uso. Las fichas iniciales están vacías y no representan trabajo realizado.
-6. Indicar al entorno de agentes cómo acceder a esta entrada y comprobar una tarea acotada. La carga de `AGENTS.md`, las skills y los roles depende del entorno elegido; los archivos por sí solos no habilitan delegación ni conexiones.
+El **orquestador** es la sesión principal, no un subagente.
 
-## Convenciones de la plantilla
+Un rol se gana el lugar solo si aísla contexto o necesita otros permisos. Por eso
+investigador y revisor son de solo lectura: leen mucho y devuelven poco, y esas
+lecturas nunca entran en la sesión que coordina.
 
-- `README.md` explica el propósito de una carpeta y permite descubrir sus recursos.
-- `template.md` es un molde para copiar y completar; no representa un recurso operativo.
-- `SKILL.md` contiene los metadatos y el procedimiento de una skill de ejemplo.
-- Los enlaces relativos permiten trasladar la estructura junto al proyecto.
-- Las decisiones particulares pertenecen al proyecto adoptante: evitar convertir ejemplos en requisitos universales.
+Sobre el implementador: en trabajo interactivo conviene implementar en la sesión
+principal, porque corregir cuesta un turno en vez de un brief nuevo. Delegarlo
+paga cuando la tarea ya está especificada y no vas a estar mirando.
 
-Esta entrega no contiene código ejecutable, configuración de servicios ni almacenamiento real de bases de datos o vectores. MCP y RAG quedan como espacios documentales opcionales. La plantilla tampoco requiere inicializar un repositorio para utilizarse.
+## Orquestación
+
+Solo para tareas **ya especificadas**: un archivo, un issue, o la conclusión de
+una sesión previa de entendimiento. Una tarea ambigua se aclara antes; una simple
+se resuelve directo.
+
+El estado vive en `.agentic/run/<id>/plan.md` mientras dura, y se borra al cerrar.
+Se ignora solo, así que no hace falta tocar el `.gitignore` del proyecto. Sin
+kernel, sin schemas, sin protocolo: un markdown que el orquestador escribe y relee.
+
+`plan.md` registra intención, nunca evidencia. Un paso marcado como hecho no
+demuestra que se hizo.
+
+## Hacer crecer la capa
+
+Por defecto es chica. `.agentic/README.md` documenta dónde va cada cosa —una tool,
+un MCP, una skill, una regla por path— y qué agregar según el proyecto lo pida.
+
+## Desarrollo
+
+El payload está en `template/`. `bin/agentic-template.mjs` lo copia; no tiene
+dependencias.

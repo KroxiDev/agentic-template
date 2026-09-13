@@ -1,0 +1,17 @@
+{
+  "name": "@kroxidev/agentic-template",
+  "version": "0.1.0",
+  "description": "Capa agentica minima para proyectos, compatible con Claude Code y Codex.",
+  "type": "module",
+  "bin": {
+    "agentic-template": "bin/agentic-template.mjs"
+  },
+  "files": [
+    "bin",
+    "template"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
