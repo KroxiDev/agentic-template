@@ -30,4 +30,4 @@
 
    4. **Self-Validating:** Tests should produce an objective, automated pass-or-fail result without requiring manual inspection. A change should not be considered complete until the required test suite passes.
 
-   5. **Timely and Targeted:** Each change should be covered by appropriate automated tests. Tests should be written at the appropriate time, ideally immediately before or alongside the production code they validate.
+   5. **Timely and Targeted:** Each change should be covered by appropriate, non-tautological automated tests. Tests should be written at the appropriate time, ideally immediately before or alongside the production code they validate.
