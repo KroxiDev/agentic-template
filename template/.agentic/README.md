@@ -6,9 +6,14 @@ herramientas lean lo mismo.
 
 ```text
 .agentic/
-  golden-rules.md               # reglas siempre vigentes
-  skills/orquestar.md           # el procedimiento de orquestación
-  skills/completar-contrato.md  # llenar los [PENDIENTE] de AGENTS.md
+  golden-rules.md                # reglas siempre vigentes
+  skills/orquestar.md            # el procedimiento de orquestación
+  skills/completar-contrato.md    # llenar los [PENDIENTE] de AGENTS.md
+  skills/tdd.md                  # ciclo rojo–verde–refactor
+  skills/code-review.md          # estándares y especificación
+  skills/usar-engram.md          # contexto entre sesiones, si está disponible
+  skills/usar-codegraph.md       # índice de código, si está disponible
+  skills/references/             # revisión, tests y dobles de prueba
   agents/                       # personas de los roles
   run/                          # workspace efímero, fuera de git
 ```
@@ -28,6 +33,26 @@ solo lo que no. Lo que no se confirma queda `[PENDIENTE]`: un hueco declarado se
 ve, un valor inventado no.
 
 Sirve igual más adelante, cada vez que agregues un campo nuevo al contrato.
+
+## Procedimientos incluidos
+
+`AGENTS.md` indica cuándo aplicar cada skill, tanto en tareas directas como
+delegadas; los roles implementador y revisor también enlazan su procedimiento.
+
+- [TDD](skills/tdd.md): para cambios de comportamiento ejecutable. Usa la
+  política de tests del contrato; las guías de tests y mocking se consultan al
+  diseñar casos o aislar dependencias.
+- [Revisión](skills/code-review.md): contrasta estándares y especificación con
+  evidencia del estado exacto revisado, incluidos cambios locales y archivos nuevos.
+- [Engram](skills/usar-engram.md): recupera y guarda contexto siguiendo el
+  protocolo y las autorizaciones del entorno.
+- [CodeGraph](skills/usar-codegraph.md): consulta el índice antes de explorar
+  código cuando está disponible; de lo contrario, usa búsqueda y lectura directa.
+
+Engram y CodeGraph son integraciones opcionales del entorno: `init` no instala
+herramientas, configura servidores MCP ni crea índices. Los procedimientos
+compartidos no necesitan adaptadores nuevos; se alcanzan desde `AGENTS.md`
+(Claude lo importa mediante `CLAUDE.md`).
 
 ## Dónde va cada cosa
 

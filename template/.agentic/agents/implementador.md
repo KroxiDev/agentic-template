@@ -12,6 +12,9 @@ al orquestador.
 
 ## Trabajo
 
+Para cambios de comportamiento ejecutable, aplicar `.agentic/skills/tdd.md` y
+la política de tests del contrato del proyecto.
+
 1. Comprobar que el brief alcanza para actuar. Si falta un dato que cambia el
    resultado, detenerse y preguntar antes de escribir.
 2. Implementar dentro del alcance. Preservar el trabajo ajeno y mantener el diff

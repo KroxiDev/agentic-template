@@ -30,9 +30,14 @@ AGENTS.md                          # contrato del proyecto — lo lee Codex
 CLAUDE.md                          # @AGENTS.md + @.agentic/golden-rules.md
 .agentic/
   golden-rules.md                  # K.E.Y. / C.L.E.A.N. / F.I.R.S.T.
-  README.md                        # mapa de integración y crecimiento
+  README.md                       # mapa de integración y crecimiento
   skills/orquestar.md              # el procedimiento     ← fuente única
-  skills/completar-contrato.md     # llenar los pendientes ← fuente única
+  skills/completar-contrato.md      # llenar los pendientes ← fuente única
+  skills/tdd.md                    # ciclo rojo–verde–refactor
+  skills/code-review.md            # estándares y especificación
+  skills/usar-engram.md            # contexto entre sesiones (opcional)
+  skills/usar-codegraph.md         # exploración por índice (opcional)
+  skills/references/{code-review,tests,mocking}.md
   agents/investigador.md           # persona              ← fuente única
   agents/implementador.md          # persona              ← fuente única
   agents/revisor.md                # persona              ← fuente única
@@ -45,7 +50,7 @@ CLAUDE.md                          # @AGENTS.md + @.agentic/golden-rules.md
   agents/{investigador,implementador,revisor}.toml
 ```
 
-18 archivos. Ocho son adaptadores.
+25 archivos. Ocho son adaptadores.
 
 ## Completar el contrato
 
@@ -68,6 +73,24 @@ se confirma queda `[PENDIENTE]`: un hueco declarado se ve, un valor inventado no
 
 Sirve de nuevo cada vez que agregues un campo al contrato.
 
+## Prácticas incluidas
+
+- **Tests:** permanentes solo por pedido explícito; temporales para validar y
+  retirar al cerrar, preservando los existentes. La política vive en `AGENTS.md`.
+- **TDD:** rojo–verde–refactor para comportamiento ejecutable, con referencias
+  de tests y mocks independientes del stack.
+- **Revisión:** estándares y especificación por separado, con evidencia del
+  estado revisado y límites explícitos.
+- **Seguridad:** aislamiento entre proyectos y autorización específica para
+  cambios de rama, operaciones destructivas de Git y publicación.
+- **Engram y CodeGraph:** procedimientos para usarlos si están disponibles en
+  el entorno. `init` no instala ni configura herramientas; sin ellas se sigue
+  con las fuentes y la búsqueda directa del proyecto.
+
+`AGENTS.md` activa estos procedimientos en tareas directas y delegadas. El
+implementador enlaza TDD y el revisor enlaza la revisión en dos ejes; el contenido
+sigue siendo único en `.agentic/`.
+
 ## Compatibilidad
 
 | | Claude Code | Codex |
@@ -75,7 +98,7 @@ Sirve de nuevo cada vez que agregues un campo al contrato.
 | Contrato | `CLAUDE.md` con `@AGENTS.md` | `AGENTS.md` directo |
 | Reglas siempre vigentes | import, en contexto al arrancar | línea imperativa en `AGENTS.md` |
 | Subagentes | `.claude/agents/*.md` | `.codex/agents/*.toml` |
-| Skills | `.claude/skills/<n>/SKILL.md` | `.agentic/skills/` vía `AGENTS.md` |
+| Skills compartidas | `.agentic/skills/` vía `@AGENTS.md`; adaptador para `/orquestar` | `.agentic/skills/` vía `AGENTS.md` |
 | MCP | `.mcp.json` | `.codex/config.toml` |
 
 Claude Code no lee `AGENTS.md`; por eso `CLAUDE.md` lo importa. Sin ese puente, el

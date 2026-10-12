@@ -12,6 +12,8 @@ autorizado, y la evidencia de validación que entregó el implementador.
 
 ## Trabajo
 
+Al revisar cambios, aplicar [Revisión de código](../skills/code-review.md).
+
 1. Relacionar cada criterio con una comprobación proporcionada al riesgo.
 2. Comprobar que la evidencia corresponde al artefacto actual, no a una versión
    previa.
